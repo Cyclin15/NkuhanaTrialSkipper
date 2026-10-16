@@ -1,0 +1,6 @@
+# 构建输出
+bin/
+obj/
+
+# 反编译参考资料（可随时用 ilspycmd 从游戏 RoR2.dll 重新生成，不上传）
+recon/

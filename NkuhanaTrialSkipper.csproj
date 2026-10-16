@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>NkuhanaTrialSkipper</AssemblyName>
+    <RootNamespace>NkuhanaTrialSkipper</RootNamespace>
+    <Version>1.0.0</Version>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <!-- 编译后自动部署到的 r2modman Default profile 插件目录 -->
+    <ProfilePluginsDir>C:\Users\Administrator\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Default\BepInEx\plugins\NkuhanaTrialSkipper</ProfilePluginsDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- recon/ 是反编译参考资料，不参与编译 -->
+    <Compile Remove="recon\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RiskOfRain2.GameLibs" Version="1.5.0-r.1" ExcludeAssets="runtime" />
+    <PackageReference Include="UnityEngine.Modules" Version="2021.3.45" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>C:\Users\Administrator\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Default\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>C:\Users\Administrator\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Default\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="RiskOfOptions">
+      <HintPath>C:\Users\Administrator\AppData\Roaming\r2modmanPlus-local\RiskOfRain2\profiles\Default\BepInEx\plugins\Rune580-Risk_Of_Options\RiskOfOptions\RiskOfOptions.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="DeployToProfile" AfterTargets="Build">
+    <ItemGroup>
+      <DeployFiles Include="$(TargetDir)$(TargetName).dll" />
+      <DeployFiles Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DeployFiles)" DestinationFolder="$(ProfilePluginsDir)\" />
+    <Message Importance="high" Text="Deployed to r2modman Default profile: @(DeployFiles)" />
+  </Target>
+
+</Project>
